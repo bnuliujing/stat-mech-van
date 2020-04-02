@@ -111,5 +111,10 @@ group.add_argument(
     type=str,
     default='out.txt',
     help='file name to append the results to')
+group.add_argument(
+    '--myfname',
+    type=str,
+    default='van_n_20.txt',
+    help='file name to append the results to')
 
 args = parser.parse_args()

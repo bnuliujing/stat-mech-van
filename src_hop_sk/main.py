@@ -68,6 +68,10 @@ def main():
         args.beta_anneal_to = args.beta
     beta = args.beta
     while beta <= args.beta_anneal_to:
+        f_list = []
+        f_std_list = []
+        e_list = []
+        s_list = []
         for step in range(args.max_step):
             optimizer.zero_grad()
 
@@ -114,6 +118,10 @@ def main():
                 energy_mean = energy.mean() / args.n
                 mag = sample.mean(dim=0)
                 mag_mean = mag.mean()
+                f_list.append(free_energy_mean.item())
+                f_std_list.append(free_energy_std.item())
+                e_list.append(energy_mean.item())
+                s_list.append(entropy_mean.item())
                 if step > 0:
                     sample_time /= args.print_step
                     train_time /= args.print_step
@@ -158,6 +166,14 @@ def main():
                 log_prob.cpu().detach().numpy(),
                 delimiter=' ',
                 fmt='%.5f')
+        
+        with open('./log/' + args.myfname, 'a', newline='\n') as f:
+            f.write('%.2f %.10g %.10g %.10g %.10g\n' % 
+            (beta, 
+            np.mean(f_list[-200:]), 
+            np.mean(f_std_list[-200:]),
+            np.mean(e_list[-200:]), 
+            np.mean(s_list[-200:])))
 
         beta += args.beta_inc
 

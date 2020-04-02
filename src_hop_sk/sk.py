@@ -28,6 +28,7 @@ class SKModel():
 
         print('SK model with n = {}, beta = {}, field = {}, seed = {}'.format(
             n, beta, field, seed))
+        print((self.J).mean(), (self.J * self.J).mean())
 
     def exact(self):
         assert self.n <= 20
